@@ -17,7 +17,7 @@ Low energy temperature and humidity sensor with ESP8266 (Wemos D1 Mini) and Bosc
 | WIFI_SSID | Your WiFi SSID to connect to. | 
 | WIFI_PASSWD | Your WiFi password. | 
 | WIFI_CONNECT_TIMEOUT_SECS | If connection is not possible within WIFI_CONNECT_TIMEOUT_SECS seconds, module goes back to sleep to save power and will try to reconnect in... | 
-| WIFI_RECONNECT_WAITTIME_SECS | ... WIFI_RECONNECT_WAITTIME_SECS seconds. | 
+| WIFI_RECONNECT_WAITTIME_SECS | ...WIFI_RECONNECT_WAITTIME_SECS seconds. | 
 | IP_ADDR | IP address of the module. | 
 | IP_GATEWAY | Gateway IP address. | 
 | IP_SUBNET | Subnet mask. | 
@@ -26,7 +26,7 @@ Low energy temperature and humidity sensor with ESP8266 (Wemos D1 Mini) and Bosc
 | INTERVAL_READ_SENSOR_SECS | Module wakes up every INTERVAL_READ_SENSOR_SECS seconds to read BME280 data. | 
 | INTERVAL_SEND_DATA_SECS | BME280 data is sent at least every INTERVAL_SEND_DATA_SECS seconds... | 
 | THRESHOLD_SEND_DATA_TEMPERATURE | ...or at any wakeup if temperature difference (value in 1/10th degrees) is greater than THRESHOLD_SEND_DATA_TEMPERATURE... | 
-| THRESHOLD_SEND_DATA_HUMIDITY | ... or at any wakeup if humidity difference is greater than THRESHOLD_SEND_DATA_HUMIDITY... | 
+| THRESHOLD_SEND_DATA_HUMIDITY | ...or at any wakeup if humidity difference is greater than THRESHOLD_SEND_DATA_HUMIDITY... | 
 | ADJUST_TEMPERATURE | Correction value for temperature. | 
 | ADJUST_HUMIDITY | Correction value for humidity. | 
 | PIN_BME_* | Pin mapping for BME280 module. | 
