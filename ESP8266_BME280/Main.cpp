@@ -15,6 +15,12 @@ extern "C" {
 #define STATE_SENDDATA		0x02
 #define STATE_SAFEMODE		0x03
 
+// BME280 Spec
+#define TEMP_MIN -40.0f
+#define TEMP_MAX 85.0f
+#define HUM_MIN 0.0f
+#define HUM_MAX 100.0f
+
 char myhostname[16] = { 0 };
 
 WiFiClient mqttWiFiClient;
@@ -79,6 +85,7 @@ void setupOTA() {
 	ArduinoOTA.onEnd([]() {
 		Serial.println("DONE");
 	});
+
 	ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
 		Serial.printf(".", (progress / (total / 100)));
 	});
@@ -173,9 +180,9 @@ boolean setupSafeMode() {
 		rtcData.state = STATE_DEEPSLEEPMODE;
 		rtcData.counter = 0;
 
-		rtcData.temp = -1000;
-		rtcData.hum = -1000;
-		rtcData.vcc = -1000;
+		rtcData.temp = -1111;
+		rtcData.hum = -1111;
+		rtcData.vcc = -1111;
 	} else {
 		Logger.debug("Waking up after reset");
 		rtcData.counter++;
@@ -306,13 +313,26 @@ void loop() {
 		rtcData.state = STATE_DEEPSLEEPMODE;
 	}
 
-	float temp = 20.0;
-	float hum = 40;
-	if (bmeSensorAvailable) {
+	float temp = 22.2;
+	float hum = 44;
+	int readRetries = 5;
+	bool validRead = false;
+
+	while (bmeSensorAvailable && !validRead && --readRetries >= 0) {
 		bme.takeForcedMeasurement();
-		temp = bme.readTemperature() + ADJUST_TEMPERATURE;
-		hum = bme.readHumidity() + ADJUST_HUMIDITY;
+		temp = bme.readTemperature();
+		hum = bme.readHumidity();
+
+		validRead = (temp >= TEMP_MIN && temp <= TEMP_MAX && hum >= HUM_MIN
+				&& hum <= HUM_MAX);
+
+		if (!validRead)
+			delay(100);
+
+		temp = temp + ADJUST_TEMPERATURE;
+		hum = hum + ADJUST_HUMIDITY;
 	}
+
 	float vcc = wifiOn ? rtcData.vcc / 100.0 : ESP.getVcc() / 1000.0;
 
 	Logger.debug("Temp: %f, Humidity: %f, VCC: %f", temp, hum, vcc);
@@ -322,9 +342,11 @@ void loop() {
 	int humCur = hum;
 
 	rtcData.state = STATE_DEEPSLEEPMODE;
+	int tempDiff = abs(tempCur - rtcData.temp);
+	int humDiff = abs(humCur - rtcData.hum);
 
-	if (abs(tempCur - rtcData.temp) >= THRESHOLD_SEND_DATA_TEMPERATURE
-			|| abs(humCur - rtcData.hum) >= THRESHOLD_SEND_DATA_HUMIDITY
+	if (tempDiff >= THRESHOLD_SEND_DATA_TEMPERATURE
+			|| humDiff >= THRESHOLD_SEND_DATA_HUMIDITY
 			|| rtcData.counter * INTERVAL_READ_SENSOR_SECS
 					>= INTERVAL_SEND_DATA_SECS) {
 		Logger.debug("Threshold exceeded, resetting to send data...");

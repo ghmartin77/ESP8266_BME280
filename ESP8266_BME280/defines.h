@@ -32,9 +32,16 @@
 #define ADJUST_TEMPERATURE				0.0
 #define ADJUST_HUMIDITY					0.0
 
-#define PIN_BME_SDA						D1
-#define PIN_BME_CLK						D2
-#define PIN_BME_VCC						D4
-#define PIN_BME_GND						D3
+// Purple BME280
+#define PIN_BME_SDA						D4
+#define PIN_BME_CLK						D3
+#define PIN_BME_VCC						D1
+#define PIN_BME_GND						D2
+
+// Blue BME280
+//#define PIN_BME_SDA						D1
+//#define PIN_BME_CLK						D2
+//#define PIN_BME_VCC						D4
+//#define PIN_BME_GND						D3
 
 #endif /* DEFINES_H_ */
