@@ -59,3 +59,7 @@ Low energy temperature and humidity sensor with ESP8266 (Wemos D1 Mini) and Bosc
 ![](assets/module_front2.png)
 
 ![](assets/module_side.png)
+
+![](assets/module2.png)
+
+![](assets/module1.png)
